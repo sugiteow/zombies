@@ -6,17 +6,17 @@ import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.*;
 
-class NeverMoveMovementPatternTest {
+class ImmobileMovementPatternTest {
 
     private char anyInstruction;
-    private NeverMoveMovementPattern movementPattern;
+    private ImmobileMovementPattern movementPattern;
     private Thing something;
 
     @BeforeEach
     public void setup() {
         something = mock(Thing.class);
         anyInstruction = 'A';
-        movementPattern = new NeverMoveMovementPattern();
+        movementPattern = new ImmobileMovementPattern();
     }
 
     @Test

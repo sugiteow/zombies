@@ -2,7 +2,7 @@ package com.ailo.zombies.movement;
 
 import com.ailo.zombies.entity.Thing;
 
-public class NeverMoveMovementPattern implements MovementPattern {
+public class ImmobileMovementPattern implements MovementPattern {
 
     @Override
     public void validate(String instruction) {
