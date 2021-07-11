@@ -19,25 +19,28 @@ class InfectableThingTest {
     private Coordinates currentCoordinates;
     private String movementInstruction;
 
+    private Coordinates expectedFinalCoordinates;
+
     @BeforeEach
     public void setup() {
         world = new World(5);
         currentCoordinates = new Coordinates(0, 1);
-        movementInstruction = "";
-        infectableThing = new TestInfectableThing(world, currentCoordinates);
+        movementInstruction = "RD";
+        infectableThing = new StubInfectableThing(world, currentCoordinates);
+        expectedFinalCoordinates = new Coordinates(1, 2);
     }
 
     @Test
-    public void shouldRemoveSelfFromTheWorldAndCreateNewZombieAndMoveFromCurrentCoordinates() {
+    public void shouldRemoveInfectableThingFromTheWorldAndCreateNewZombieAndMoveWhenTurnedToZombie() {
         Zombie resultingZombie = infectableThing.turnToZombie(movementInstruction);
 
-        assertThat(resultingZombie.getCurrentCoordinates(), is(currentCoordinates));
-        assertThat(world.getContent(currentCoordinates), onlyHasItems(resultingZombie));
+        assertThat(resultingZombie.getCurrentCoordinates(), is(expectedFinalCoordinates));
+        assertThat(world.getContent(expectedFinalCoordinates), onlyHasItems(resultingZombie));
     }
 
-    private class TestInfectableThing extends InfectableThing {
+    private class StubInfectableThing extends InfectableThing {
 
-        public TestInfectableThing(World world, Coordinates startingCoordinates) {
+        public StubInfectableThing(World world, Coordinates startingCoordinates) {
             super(world, startingCoordinates);
         }
 
