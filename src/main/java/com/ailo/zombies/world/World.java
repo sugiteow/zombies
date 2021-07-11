@@ -13,6 +13,7 @@ import static java.lang.String.format;
 
 public class World {
     private final Map<Coordinates, Set<Thing>> worldContents = new HashMap<>();
+    private final Coordinates boundaryCoordinates;
 
     public World(int worldSize) {
         for (int x = 0; x < worldSize; x++) {
@@ -20,6 +21,7 @@ public class World {
                 worldContents.put(new Coordinates(x, y), new HashSet<>());
             }
         }
+        this.boundaryCoordinates = new Coordinates(worldSize, worldSize);
     }
 
     public Set<Thing> getContent(Coordinates coordinates) {

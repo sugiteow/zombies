@@ -1,33 +1,33 @@
 package com.ailo.zombies.movement;
 
-import com.ailo.zombies.entity.Thing;
+import com.ailo.zombies.world.Coordinates;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.mockito.Mockito.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsEmptyCollection.empty;
 
 class ImmobileMovementPatternTest {
 
     private char anyInstruction;
-    private ImmobileMovementPattern movementPattern;
-    private Thing something;
+    private ImmobileMovementPattern immobileMovementPattern;
+    private Coordinates originalCoordinates;
 
     @BeforeEach
     public void setup() {
-        something = mock(Thing.class);
+        originalCoordinates = new Coordinates(5, 5);
         anyInstruction = 'A';
-        movementPattern = new ImmobileMovementPattern();
+        immobileMovementPattern = new ImmobileMovementPattern();
     }
 
     @Test
-    public void shouldDoNothingWhenAppliedToAnything() {
-        movementPattern.applyTo(something, anyInstruction);
-        verifyNoInteractions(something);
+    public void shouldReturnEmptyListWhenTranslatingAnyInstruction() {
+        assertThat(immobileMovementPattern.translate("any-instructions"), is(empty()));
     }
 
     @Test
-    public void shouldDoNothingWhenValidatingAnyInstruction() {
-        movementPattern.applyTo(something, anyInstruction);
-        verifyNoInteractions(something);
+    public void shouldReturnOriginalCoordinateWhenApplyingAnyInstruction() {
+        assertThat(immobileMovementPattern.applyTo(originalCoordinates, anyInstruction), is(originalCoordinates));
     }
 }

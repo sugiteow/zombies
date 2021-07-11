@@ -1,16 +1,21 @@
 package com.ailo.zombies.movement;
 
-import com.ailo.zombies.entity.Thing;
+import com.ailo.zombies.world.Coordinates;
 
-public class ImmobileMovementPattern implements MovementPattern {
+import java.util.Collections;
+import java.util.List;
+
+import static java.util.Collections.emptyList;
+
+class ImmobileMovementPattern implements MovementPattern {
 
     @Override
-    public void validate(String instruction) {
-        // do nothing.  This thing can't move
+    public List<Character> translate(String instruction) {
+        return emptyList();
     }
 
     @Override
-    public void applyTo(Thing thing, char instruction) {
-        // do nothing.  This thing can't move
+    public Coordinates applyTo(Coordinates originalCoordinates, char instruction) {
+        return originalCoordinates;
     }
 }
