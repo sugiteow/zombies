@@ -2,6 +2,7 @@ package com.ailo.zombies.movement;
 
 import com.ailo.zombies.world.Coordinates;
 import com.ailo.zombies.world.World;
+import com.sun.javaws.JnlpxArgs;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,6 +11,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 class SingleCoordinatesMovementPatternTest {
 
@@ -50,19 +53,55 @@ class SingleCoordinatesMovementPatternTest {
     }
 
     @Test
-    public void shouldChangeTheXCoordinatesByOneWhenApplyingLeftOrRightInstruction() {
-        assertThat(movementPattern.applyTo(new Coordinates(3, 2), 'L', world), is(new Coordinates(2, 2)));
-        assertThat(movementPattern.applyTo(new Coordinates(2, 2), 'L', world), is(new Coordinates(1, 2)));
-        assertThat(movementPattern.applyTo(new Coordinates(3, 2), 'R', world), is(new Coordinates(4, 2)));
-        assertThat(movementPattern.applyTo(new Coordinates(2, 2), 'R', world), is(new Coordinates(3, 2)));
+    public void shouldReduceXCoordinatesByOneWhenApplyingLeftInstruction() {
+        Coordinates originalCoordinates = mock(Coordinates.class);
+        Coordinates expectedCoordinates = new Coordinates(2, 1);
+
+        when(originalCoordinates.add(any(), any())).thenReturn(expectedCoordinates);
+
+        Coordinates resultingCoordinates = movementPattern.applyTo(originalCoordinates, 'L', world);
+
+        assertThat(resultingCoordinates, is(expectedCoordinates));
+        verify(originalCoordinates).add(new Coordinates(-1,0), world.getBoundaryCoordinates());
     }
 
     @Test
-    public void shouldReduceTheYCoordinatesByOneWhenApplyingUpOrDownInstruction() {
-        assertThat(movementPattern.applyTo(new Coordinates(2, 3), 'U', world), is(new Coordinates(2, 2)));
-        assertThat(movementPattern.applyTo(new Coordinates(2, 2), 'U', world), is(new Coordinates(2, 1)));
-        assertThat(movementPattern.applyTo(new Coordinates(2, 3), 'D', world), is(new Coordinates(2, 4)));
-        assertThat(movementPattern.applyTo(new Coordinates(2, 2), 'D', world), is(new Coordinates(2, 3)));
+    public void shouldAddXCoordinatesByOneWhenApplyingRightInstruction() {
+        Coordinates originalCoordinates = mock(Coordinates.class);
+        Coordinates expectedCoordinates = new Coordinates(2, 1);
+
+        when(originalCoordinates.add(any(), any())).thenReturn(expectedCoordinates);
+
+        Coordinates resultingCoordinates = movementPattern.applyTo(originalCoordinates, 'R', world);
+
+        assertThat(resultingCoordinates, is(expectedCoordinates));
+        verify(originalCoordinates).add(new Coordinates(1,0), world.getBoundaryCoordinates());
+    }
+
+    @Test
+    public void shouldReduceTheYCoordinatesByOneWhenApplyingUpInstruction() {
+        Coordinates originalCoordinates = mock(Coordinates.class);
+        Coordinates expectedCoordinates = new Coordinates(2, 1);
+
+        when(originalCoordinates.add(any(), any())).thenReturn(expectedCoordinates);
+
+        Coordinates resultingCoordinates = movementPattern.applyTo(originalCoordinates, 'U', world);
+
+        assertThat(resultingCoordinates, is(expectedCoordinates));
+        verify(originalCoordinates).add(new Coordinates(0,-1), world.getBoundaryCoordinates());
+    }
+
+    @Test
+    public void shouldIncreaseTheYCoordinatesByOneWhenApplyingDownInstruction() {
+        Coordinates originalCoordinates = mock(Coordinates.class);
+        Coordinates expectedCoordinates = new Coordinates(2, 1);
+
+        when(originalCoordinates.add(any(), any())).thenReturn(expectedCoordinates);
+
+        Coordinates resultingCoordinates = movementPattern.applyTo(originalCoordinates, 'D', world);
+
+        assertThat(resultingCoordinates, is(expectedCoordinates));
+        verify(originalCoordinates).add(new Coordinates(0,1), world.getBoundaryCoordinates());
     }
 
 }
