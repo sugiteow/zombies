@@ -23,7 +23,10 @@ public class StubThing extends Thing {
 
     @Override
     void applyEffect(Thing thing, String movementInstruction) {
-        this.affectedThings.add(thing);
+        if (this.affectedThings.contains(thing)) {
+        } else {
+            this.affectedThings.add(thing);
+        }
     }
 
     public List<Thing> getAffectedThings() {

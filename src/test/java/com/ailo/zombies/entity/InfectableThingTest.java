@@ -49,7 +49,6 @@ class InfectableThingTest {
 
         @Override
         void applyEffect(Thing thing, String movementInstruction) {
-
         }
     }
 }

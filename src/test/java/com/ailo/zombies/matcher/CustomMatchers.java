@@ -5,6 +5,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class CustomMatchers {
 
             @Override
             public void describeTo(Description description) {
-                description.appendText(actualItems.toString());
+                description.appendText(Arrays.toString(expectedItems));
             }
         };
     }

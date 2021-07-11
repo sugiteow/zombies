@@ -16,6 +16,5 @@ public class Creature extends InfectableThing {
 
     @Override
     void applyEffect(Thing thing, String movementInstruction) {
-        // doesn't do anything
     }
 }

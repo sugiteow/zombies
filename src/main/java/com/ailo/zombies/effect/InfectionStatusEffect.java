@@ -19,8 +19,9 @@ public class InfectionStatusEffect implements StatusEffect {
     public void apply(Thing thing) {
         if (thing instanceof InfectableThing) {
             ((InfectableThing) thing).turnToZombie(movementInstruction);
+        } else {
+            throw new IllegalArgumentException(format("[%s] is not infectable", thing));
         }
-        throw new IllegalArgumentException(format("[%s] is not infectable", thing));
     }
 
     @Override

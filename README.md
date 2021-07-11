@@ -13,5 +13,5 @@
   moving grid by grid, but will matter if the zombie has a long range movement (e.g. say if it moves 8 grid at once). As
   we can't assume that it walks when moving multiple grid at once (i.e. it could be jumping really high ;p), we can't
   assume that it will actually pass anything in between the starting and the end grid of the movement.
-* Tag on zombies and creatures are not going to be reset when they are removed from the world (as the tag acts as a
-  unique identifier of that thing)
+* Tag on Things are not going to be reset when they are removed from the world (as the tag acts as a unique identifier
+  of that thing)

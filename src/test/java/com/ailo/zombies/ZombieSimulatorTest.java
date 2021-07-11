@@ -42,5 +42,4 @@ class ZombieSimulatorTest {
 
         assertThat(result.getAllCreatureCoordinates(), is(empty()));
     }
-
 }

@@ -3,11 +3,13 @@ package com.ailo.zombies.world;
 import com.ailo.zombies.entity.Thing;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
+import static java.util.Comparator.comparing;
 
 public class World {
-    private final Map<Class<? extends Thing>, Integer> numberOfThings = new HashMap<>();
+    private final Map<Class<? extends Thing>, Integer> numberOfAddedThings = new HashMap<>();
     private final Map<Coordinates, Set<Thing>> worldContents = new HashMap<>();
     private final Coordinates boundaryCoordinates;
 
@@ -32,9 +34,9 @@ public class World {
         getContent(coordinates).add(thing);
 
         if (thing.getTag() == null) {
-            Integer numberOfThing = numberOfThings.getOrDefault(thing.getClass(), 0);
+            Integer numberOfThing = numberOfAddedThings.getOrDefault(thing.getClass(), 0);
             thing.setTag(numberOfThing);
-            numberOfThings.put(thing.getClass(), ++numberOfThing);
+            numberOfAddedThings.put(thing.getClass(), ++numberOfThing);
         }
     }
 
@@ -48,13 +50,13 @@ public class World {
     }
 
     public List<Coordinates> getCoordinatesForAll(Class<? extends Thing> type) {
-        List<Coordinates> coordinates = new ArrayList<>();
-        worldContents.entrySet().forEach(entry -> entry.getValue()
-                .stream()
+        Set<Thing> thingsOfCertainType = new TreeSet<>(comparing(Thing::getTag));
+        worldContents.values().forEach(things -> things.stream()
                 .filter(thing -> type.isAssignableFrom(thing.getClass()))
-                .sorted(Comparator.comparing(Thing::getTag))
-                .forEach(content -> coordinates.add(entry.getKey())));
+                .forEach(thingsOfCertainType::add));
 
-        return coordinates;
+        return thingsOfCertainType.stream()
+                .map(Thing::getCurrentCoordinates)
+                .collect(Collectors.toList());
     }
 }

@@ -27,15 +27,19 @@ public abstract class Thing {
 
     public void move(String movementInstruction) {
         Coordinates finalCoordinates = currentCoordinates;
-        LinkedHashSet<Thing> passedThings = new LinkedHashSet<>();
+        LinkedHashSet<Thing> affectedThings = new LinkedHashSet<>();
         MovementPattern movementPattern = getMovementPattern();
 
         for (Character instruction : movementPattern.translate(movementInstruction)) {
             finalCoordinates = movementPattern.applyTo(finalCoordinates, instruction, world);
             Set<Thing> things = world.getContent(finalCoordinates);
             if (!things.isEmpty()) {
-                things.forEach(thing -> this.applyEffect(thing, movementInstruction));
-                passedThings.addAll(things);
+                things.forEach(thing -> {
+                    if (!thing.hasUnresolvedStatusEffect()) {
+                        this.applyEffect(thing, movementInstruction);
+                        affectedThings.add(thing);
+                    }
+                });
             }
         }
 
@@ -44,7 +48,7 @@ public abstract class Thing {
         currentCoordinates = finalCoordinates;
 
         LOGGER.info(format("%s moved to %s", this, finalCoordinates));
-        passedThings.forEach(Thing::resolveStatusEffect);
+        affectedThings.forEach(Thing::resolveStatusEffect);
     }
 
     public Coordinates getCurrentCoordinates() {
@@ -61,14 +65,12 @@ public abstract class Thing {
 
     public boolean setStatusEffect(StatusEffect statusEffect) {
         // if thing already have a status effect attached to it, don't overwrite it.
-        if (statusEffect == null) {
+        if (this.statusEffect == null) {
             this.statusEffect = statusEffect;
             return true;
         }
         return false;
     }
-
-    ;
 
     World getWorld() {
         return world;
@@ -77,7 +79,12 @@ public abstract class Thing {
     void resolveStatusEffect() {
         if (statusEffect != null) {
             this.statusEffect.apply(this);
+            this.statusEffect = null;
         }
+    }
+
+    public boolean hasUnresolvedStatusEffect() {
+        return this.statusEffect != null;
     }
 
     @Override
