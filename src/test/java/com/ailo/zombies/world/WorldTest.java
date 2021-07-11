@@ -1,12 +1,12 @@
 package com.ailo.zombies.world;
 
-import com.ailo.zombies.entity.Nothing;
 import com.ailo.zombies.entity.Thing;
-import com.ailo.zombies.world.Coordinates;
-import com.ailo.zombies.world.World;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Set;
+
+import static com.ailo.zombies.matcher.CustomMatchers.onlyHasItems;
 import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -33,10 +33,10 @@ class WorldTest {
         for (int x = 0; x < worldSize; x++) {
             for (int y = 0; y < worldSize; y++) {
                 Coordinates coordinates = new Coordinates(x, y);
-                Thing content = world.getContent(coordinates);
-                String message = format("Expecting world content on (%s,%s) to be Nothing", x, y);
+                Set<Thing> content = world.getContent(coordinates);
+                String message = format("Expecting world content on (%s,%s) to be Empty", x, y);
 
-                assertThat(message, content.isNothing(), is(true));
+                assertThat(message, content.isEmpty(), is(true));
             }
         }
     }
@@ -51,29 +51,29 @@ class WorldTest {
     }
 
     @Test
-    public void shouldBeAbleToAddContentToTheWorld() {
+    public void shouldBeAbleToPlaceSomethingToTheWorld() {
         Coordinates coordinates = new Coordinates(1, 2);
-        Coordinates otherCoordinates = new Coordinates(2, 2);
 
-        world.addContent(coordinates, something);
+        world.place(something, coordinates);
 
-        assertThat(world.getContent(coordinates), is(something));
-        assertThat(world.getContent(otherCoordinates), instanceOf(Nothing.class));
+        assertThat(world.getContent(coordinates), onlyHasItems(something));
     }
 
     @Test
-    public void shouldThrowIllegalArgumentExceptionWhenTryingToAddContentToNonExistentCoordinates() {
-        assertThrows(IllegalArgumentException.class, () -> world.addContent(new Coordinates(-1, -1), something));
-        assertThrows(IllegalArgumentException.class, () -> world.addContent(new Coordinates(5, 4), something));
-        assertThrows(IllegalArgumentException.class, () -> world.addContent(new Coordinates(4, 5), something));
+    public void shouldThrowIllegalArgumentExceptionWhenTryingToPlaceSomethingToNonExistentCoordinates() {
+        assertThrows(IllegalArgumentException.class, () -> world.place(something, new Coordinates(-1, -1)));
+        assertThrows(IllegalArgumentException.class, () -> world.place(something, new Coordinates(5, 4)));
+        assertThrows(IllegalArgumentException.class, () -> world.place(something, new Coordinates(4, 5)));
     }
 
     @Test
-    public void shouldThrowIllegalArgumentExceptionWhenTryingToAddContentToNonEmptyCoordinates() {
+    public void shouldAllowPlacingMultipleThingOnTheSameCoordinates() {
         Thing otherThing = mock(Thing.class);
         Coordinates coordinates = new Coordinates(1, 1);
 
-        world.addContent(coordinates, this.something);
-        assertThrows(IllegalArgumentException.class, () -> world.addContent(coordinates, otherThing));
+        world.place(something, coordinates);
+        world.place(otherThing ,coordinates);
+
+        assertThat(world.getContent(coordinates), onlyHasItems(something, otherThing));
     }
 }

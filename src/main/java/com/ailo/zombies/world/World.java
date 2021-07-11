@@ -1,38 +1,36 @@
 package com.ailo.zombies.world;
 
-import com.ailo.zombies.entity.Nothing;
 import com.ailo.zombies.entity.Thing;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.SetMultimap;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import static java.lang.String.format;
 
 public class World {
-    private final Map<Coordinates, Thing> worldContents = new HashMap<>();
+    private final Map<Coordinates, Set<Thing>> worldContents = new HashMap<>();
 
     public World(int worldSize) {
         for (int x = 0; x < worldSize; x++) {
             for (int y = 0; y < worldSize; y++) {
-                worldContents.put(new Coordinates(x, y), new Nothing());
+                worldContents.put(new Coordinates(x, y), new HashSet<>());
             }
         }
     }
 
-    public Thing getContent(Coordinates coordinates) {
-        Thing thing = worldContents.get(coordinates);
-        if (thing == null) {
+    public Set<Thing> getContent(Coordinates coordinates) {
+        Set<Thing> things = worldContents.get(coordinates);
+        if (things == null) {
             throw new IllegalArgumentException(format("Unable to find Coordinates %s.  Please make sure the coordinates is valid", coordinates));
         }
-        return thing;
+        return things;
     }
 
-    public void addContent(Coordinates coordinates, Thing content) {
-        Thing existingContent = getContent(coordinates);
-        if (!existingContent.isNothing()) {
-            throw new IllegalArgumentException(format("Unable to add [%s] to %s. Something is already there", content, coordinates));
-        }
-
-        worldContents.put(coordinates, content);
+    public void place(Thing thing, Coordinates coordinates) {
+        getContent(coordinates).add(thing);
     }
 }
