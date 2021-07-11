@@ -13,14 +13,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-class SingleCoordinatesMovementPatternTest {
+class WalkingMovementPatternTest {
 
-    private SingleCoordinatesMovementPattern movementPattern;
+    private WalkingMovementPattern movementPattern;
     private World world;
 
     @BeforeEach
     public void setup() {
-        movementPattern = new SingleCoordinatesMovementPattern();
+        movementPattern = new WalkingMovementPattern();
         world = new World(5);
     }
 

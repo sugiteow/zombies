@@ -6,8 +6,8 @@ import com.ailo.zombies.world.World;
 import java.util.List;
 
 public interface MovementPattern {
-    public static final MovementPattern LATERAL_MOVEMENT_PATTERN = new SingleCoordinatesMovementPattern();
-    public static final MovementPattern IMMOBILE_MOVEMENT_PATTERN = new ImmobileMovementPattern();
+    MovementPattern WALKING = new WalkingMovementPattern();
+    MovementPattern IMMOBILE = new ImmobileMovementPattern();
 
     List<Character> translate(String movementInstruction);
     Coordinates applyTo(Coordinates originalCoordinates, Character instruction, World world);

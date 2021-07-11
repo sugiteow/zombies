@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 import static java.lang.String.format;
 import static java.util.Collections.emptyList;
 
-class SingleCoordinatesMovementPattern implements MovementPattern {
+class WalkingMovementPattern implements MovementPattern {
 
     private static final Map<Character, Coordinates> VALID_INSTRUCTIONS = new HashMap<Character, Coordinates>() {{
         put('L', new Coordinates(-1, 0));
