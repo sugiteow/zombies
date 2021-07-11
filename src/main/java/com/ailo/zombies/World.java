@@ -11,7 +11,7 @@ public class World {
     public World(int worldSize) {
         for (int x = 0; x < worldSize; x++) {
             for (int y = 0; y < worldSize; y++) {
-                worldContents.put(new Coordinates(x,y), new EmptyContent());
+                worldContents.put(new Coordinates(x, y), new EmptyContent());
             }
         }
     }
@@ -22,5 +22,14 @@ public class World {
             throw new IllegalArgumentException(format("Unable to find Coordinates %s.  Please make sure the coordinates is valid", coordinates));
         }
         return worldContent;
+    }
+
+    public void addContent(Coordinates coordinates, WorldContent content) {
+        WorldContent existingContent = getContent(coordinates);
+        if (!existingContent.isEmpty()) {
+            throw new IllegalArgumentException(format("Unable to add [%s] to %s. Something is already there", content, coordinates));
+        }
+
+        worldContents.put(coordinates, content);
     }
 }
