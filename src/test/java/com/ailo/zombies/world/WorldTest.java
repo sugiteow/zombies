@@ -1,5 +1,6 @@
 package com.ailo.zombies.world;
 
+import com.ailo.zombies.entity.StubThing;
 import com.ailo.zombies.entity.Thing;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -79,9 +80,10 @@ class WorldTest {
 
     @Test
     public void shouldRemoveThingFromCoordinates() {
-        Thing aThing = mock(Thing.class);
-        Thing otherThing = mock(Thing.class);
         Coordinates coordinates = new Coordinates(1, 1);
+
+        Thing aThing = new StubThing(world, coordinates);
+        Thing otherThing = new StubThing(world, coordinates);
 
         world.place(aThing, coordinates);
         world.place(otherThing, coordinates);
@@ -94,14 +96,17 @@ class WorldTest {
     }
 
     @Test
-    public void shouldDoNothingWhenTheThingToRemoveNoLongerExistsInTheGivenCoordinates() {
-        Thing aThing = mock(Thing.class);
-        Thing otherThing = mock(Thing.class);
+    public void shouldDoNothingWhenTheThingToRemoveNoLongerExistsInTheWorld() {
         Coordinates coordinates = new Coordinates(1, 1);
+        Thing aThing = new StubThing(world, coordinates);
+        Thing otherThing = new StubThing(world, coordinates);
 
         world.place(aThing, coordinates);
 
         world.remove(otherThing);
         world.remove(aThing);
+        world.remove(aThing);
+
+        assertThat(world.getContent(coordinates), is(emptySet()));
     }
 }

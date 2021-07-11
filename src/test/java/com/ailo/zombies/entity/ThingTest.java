@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import static com.ailo.zombies.matcher.CustomMatchers.onlyHasItems;
 import static com.google.common.collect.Sets.newHashSet;
@@ -20,7 +19,7 @@ import static org.mockito.Mockito.*;
 class ThingTest {
 
     private MovementPattern movementPattern;
-    private TestThing thing;
+    private StubThing thing;
     private String movementInstruction;
     private List<Character> translatedInstructions;
     private World world;
@@ -42,7 +41,7 @@ class ThingTest {
             add('B');
         }};
 
-        thing = new TestThing(world, startingCoordinates);
+        thing = new StubThing(world, startingCoordinates);
 
         when(world.getContent(any())).thenReturn(emptySet());
         when(movementPattern.translate(movementInstruction)).thenReturn(translatedInstructions);
@@ -52,7 +51,7 @@ class ThingTest {
 
     @Test
     public void shouldAddThingToWorldOnConstructor() {
-        Thing thing = new TestThing(world, startingCoordinates);
+        Thing thing = new StubThing(world, startingCoordinates);
 
         verify(world).place(thing, startingCoordinates);
     }
@@ -77,9 +76,9 @@ class ThingTest {
 
     @Test
     public void shouldApplyEffectToEverythingThatGotPassedWhenMoving() {
-        Thing passedThing1 = new TestThing(world, coordinatesAfterA);
-        Thing passedThing2 = new TestThing(world, coordinatesAfterA);
-        Thing passedThing3 = new TestThing(world, finalCoordinates);
+        Thing passedThing1 = new StubThing(world, coordinatesAfterA);
+        Thing passedThing2 = new StubThing(world, coordinatesAfterA);
+        Thing passedThing3 = new StubThing(world, finalCoordinates);
 
         when(world.getContent(coordinatesAfterA)).thenReturn(newHashSet(passedThing1, passedThing2));
         when(world.getContent(finalCoordinates)).thenReturn(newHashSet(passedThing3));
@@ -91,8 +90,8 @@ class ThingTest {
 
     @Test
     public void shouldOnlyApplyEffectOnceToEachThingsPassedWhenMoving() {
-        Thing passedThing1 = new TestThing(world, coordinatesAfterA);
-        Thing passedThing2 = new TestThing(world, coordinatesAfterA);
+        Thing passedThing1 = new StubThing(world, coordinatesAfterA);
+        Thing passedThing2 = new StubThing(world, coordinatesAfterA);
 
         when(world.getContent(coordinatesAfterA)).thenReturn(newHashSet(passedThing1, passedThing2));
         when(world.getContent(finalCoordinates)).thenReturn(newHashSet(passedThing1));
@@ -102,26 +101,4 @@ class ThingTest {
         assertThat(thing.getAffectedThings(), onlyHasItems(passedThing1, passedThing2));
     }
 
-    class TestThing extends Thing {
-
-        private Set<Thing> affectedThings;
-
-        public TestThing(World world, Coordinates startingCoordinates) {
-            super(world, startingCoordinates);
-        }
-
-        @Override
-        MovementPattern getMovementPattern() {
-            return movementPattern;
-        }
-
-        @Override
-        void applyEffectTo(Set<Thing> things, String movementInstruction) {
-            this.affectedThings = things;
-        }
-
-        public Set<Thing> getAffectedThings() {
-            return affectedThings;
-        }
-    }
 }
