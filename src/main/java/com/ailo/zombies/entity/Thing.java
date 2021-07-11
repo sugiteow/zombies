@@ -1,21 +1,23 @@
 package com.ailo.zombies.entity;
 
+import com.ailo.zombies.effect.StatusEffect;
 import com.ailo.zombies.movement.MovementPattern;
 import com.ailo.zombies.world.Coordinates;
 import com.ailo.zombies.world.World;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
 import static java.lang.String.format;
 
 public abstract class Thing {
-    static final Logger LOGGER = Logger.getLogger(Thing.class.getSimpleName());
+    private static final Logger LOGGER = Logger.getLogger(Thing.class.getSimpleName());
 
     private final World world;
     private Coordinates currentCoordinates;
     private Integer tag;
+    private StatusEffect statusEffect;
 
     public Thing(World world, Coordinates startingCoordinates) {
         this.world = world;
@@ -25,14 +27,14 @@ public abstract class Thing {
 
     public void move(String movementInstruction) {
         Coordinates finalCoordinates = currentCoordinates;
-        Set<Thing> passedThings = new HashSet<>();
-
+        LinkedHashSet<Thing> passedThings = new LinkedHashSet<>();
         MovementPattern movementPattern = getMovementPattern();
 
         for (Character instruction : movementPattern.translate(movementInstruction)) {
             finalCoordinates = movementPattern.applyTo(finalCoordinates, instruction, world);
             Set<Thing> things = world.getContent(finalCoordinates);
             if (!things.isEmpty()) {
+                things.forEach(thing -> this.applyEffect(thing, movementInstruction));
                 passedThings.addAll(things);
             }
         }
@@ -42,21 +44,12 @@ public abstract class Thing {
         currentCoordinates = finalCoordinates;
 
         LOGGER.info(format("%s moved to %s", this, finalCoordinates));
-
-        this.applyEffectTo(passedThings, movementInstruction);
+        passedThings.forEach(Thing::resolveStatusEffect);
     }
 
     public Coordinates getCurrentCoordinates() {
         return currentCoordinates;
     }
-
-    World getWorld() {
-        return world;
-    }
-
-    abstract MovementPattern getMovementPattern();
-
-    abstract void applyEffectTo(Set<Thing> things, String movementInstruction);
 
     public void setTag(Integer tag) {
         this.tag = tag;
@@ -66,8 +59,33 @@ public abstract class Thing {
         return tag;
     }
 
+    public boolean setStatusEffect(StatusEffect statusEffect) {
+        // if thing already have a status effect attached to it, don't overwrite it.
+        if (statusEffect == null) {
+            this.statusEffect = statusEffect;
+            return true;
+        }
+        return false;
+    }
+
+    ;
+
+    World getWorld() {
+        return world;
+    }
+
+    void resolveStatusEffect() {
+        if (statusEffect != null) {
+            this.statusEffect.apply(this);
+        }
+    }
+
     @Override
     public String toString() {
         return format("%s %s", this.getClass().getSimpleName(), tag);
     }
+
+    abstract MovementPattern getMovementPattern();
+
+    abstract void applyEffect(Thing thing, String movementInstruction);
 }

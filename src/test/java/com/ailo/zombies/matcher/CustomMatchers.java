@@ -9,6 +9,8 @@ import java.util.Collection;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.joining;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -52,7 +54,11 @@ public class CustomMatchers {
 
             @Override
             public void describeTo(Description description) {
-                description.appendText("Containing only [" + expectedItems.toString() + "] in order");
+                String expectedItemsString = stream(expectedItems)
+                        .map(Object::toString)
+                        .collect(joining(","));
+
+                description.appendText("Containing only [" + expectedItemsString + "] in order");
             }
         };
     }

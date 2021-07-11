@@ -2,10 +2,7 @@ package com.ailo.zombies.world;
 
 import com.ailo.zombies.entity.Thing;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static java.lang.String.format;
 
@@ -48,5 +45,16 @@ public class World {
     public void remove(Thing thing) {
         Set<Thing> contents = getContent(thing.getCurrentCoordinates());
         contents.remove(thing);
+    }
+
+    public List<Coordinates> getCoordinatesForAll(Class<? extends Thing> type) {
+        List<Coordinates> coordinates = new ArrayList<>();
+        worldContents.entrySet().forEach(entry -> entry.getValue()
+                .stream()
+                .filter(thing -> type.isAssignableFrom(thing.getClass()))
+                .sorted(Comparator.comparing(Thing::getTag))
+                .forEach(content -> coordinates.add(entry.getKey())));
+
+        return coordinates;
     }
 }

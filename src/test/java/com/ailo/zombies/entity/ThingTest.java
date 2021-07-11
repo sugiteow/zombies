@@ -5,11 +5,12 @@ import com.ailo.zombies.world.Coordinates;
 import com.ailo.zombies.world.World;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InOrder;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ailo.zombies.matcher.CustomMatchers.onlyHasItems;
+import static com.ailo.zombies.matcher.CustomMatchers.onlyHasItemsInOrder;
 import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Collections.emptySet;
 import static org.hamcrest.CoreMatchers.is;
@@ -76,30 +77,23 @@ class ThingTest {
     }
 
     @Test
-    public void shouldApplyEffectToEverythingThatGotPassedWhenMoving() {
-        Thing passedThing1 = new StubThing(world, coordinatesAfterA);
-        Thing passedThing2 = new StubThing(world, coordinatesAfterA);
-        Thing passedThing3 = new StubThing(world, finalCoordinates);
+    public void shouldApplyEffectToEverythingThatGotPasseWhenMovingAndResolveItInOrderOfPassing() {
+        Thing passedThing1 = mock(Thing.class);
+        Thing passedThing2 = mock(Thing.class);
+        Thing passedThing3 = mock(Thing.class);
 
         when(world.getContent(coordinatesAfterA)).thenReturn(newHashSet(passedThing1, passedThing2));
         when(world.getContent(finalCoordinates)).thenReturn(newHashSet(passedThing3));
 
         thing.move(movementInstruction);
 
-        assertThat(thing.getAffectedThings(), onlyHasItems(passedThing1, passedThing2, passedThing3));
-    }
+        assertThat(thing.getAffectedThings(), onlyHasItemsInOrder(passedThing1, passedThing2, passedThing3));
 
-    @Test
-    public void shouldOnlyApplyEffectOnceToEachThingsPassedWhenMoving() {
-        Thing passedThing1 = new StubThing(world, coordinatesAfterA);
-        Thing passedThing2 = new StubThing(world, coordinatesAfterA);
+        InOrder inOrder = inOrder(passedThing1, passedThing2, passedThing3);
 
-        when(world.getContent(coordinatesAfterA)).thenReturn(newHashSet(passedThing1, passedThing2));
-        when(world.getContent(finalCoordinates)).thenReturn(newHashSet(passedThing1));
-
-        thing.move(movementInstruction);
-
-        assertThat(thing.getAffectedThings(), onlyHasItems(passedThing1, passedThing2));
+        inOrder.verify(passedThing1).resolveStatusEffect();
+        inOrder.verify(passedThing2).resolveStatusEffect();
+        inOrder.verify(passedThing3).resolveStatusEffect();
     }
 
 }

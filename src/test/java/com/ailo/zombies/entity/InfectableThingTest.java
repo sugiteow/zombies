@@ -6,8 +6,6 @@ import com.ailo.zombies.world.World;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Set;
-
 import static com.ailo.zombies.matcher.CustomMatchers.onlyHasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -50,7 +48,7 @@ class InfectableThingTest {
         }
 
         @Override
-        void applyEffectTo(Set<Thing> things, String movementInstruction) {
+        void applyEffect(Thing thing, String movementInstruction) {
 
         }
     }

@@ -4,12 +4,13 @@ import com.ailo.zombies.movement.MovementPattern;
 import com.ailo.zombies.world.Coordinates;
 import com.ailo.zombies.world.World;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StubThing extends Thing {
 
     private MovementPattern movementPattern;
-    private Set<Thing> affectedThings;
+    private List<Thing> affectedThings = new ArrayList<>();
 
     public StubThing(World world, Coordinates startingCoordinates) {
         super(world, startingCoordinates);
@@ -21,11 +22,11 @@ public class StubThing extends Thing {
     }
 
     @Override
-    void applyEffectTo(Set<Thing> things, String movementInstruction) {
-        this.affectedThings = things;
+    void applyEffect(Thing thing, String movementInstruction) {
+        this.affectedThings.add(thing);
     }
 
-    public Set<Thing> getAffectedThings() {
+    public List<Thing> getAffectedThings() {
         return affectedThings;
     }
 

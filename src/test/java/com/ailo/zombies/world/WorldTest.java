@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Set;
 
 import static com.ailo.zombies.matcher.CustomMatchers.onlyHasItems;
+import static com.ailo.zombies.matcher.CustomMatchers.onlyHasItemsInOrder;
 import static java.lang.String.format;
 import static java.util.Collections.emptySet;
 import static org.hamcrest.CoreMatchers.is;
@@ -157,5 +158,26 @@ class WorldTest {
         world.remove(aThing);
 
         assertThat(world.getContent(coordinates), is(emptySet()));
+    }
+
+    @Test
+    public void shouldGetAllCoordinatesForACertainTypeOfThingsSortedByItsTag() {
+        Coordinates coordinate1 = new Coordinates(0, 0);
+        Coordinates coordinate2 = new Coordinates(1, 2);
+        Coordinates coordinate3 = new Coordinates(0, 1);
+        Coordinates coordinate4 = new Coordinates(1, 1);
+        Coordinates coordinate5 = new Coordinates(2, 2);
+        Coordinates coordinate6 = new Coordinates(3, 1);
+
+        new Zombie(world, coordinate1);
+        new Zombie(world, coordinate2);
+        new Zombie(world, coordinate3);
+
+        new Creature(world, coordinate4);
+        new Creature(world, coordinate5);
+        new Creature(world, coordinate6);
+
+        assertThat(world.getCoordinatesForAll(Zombie.class), onlyHasItemsInOrder(coordinate1, coordinate2, coordinate3));
+        assertThat(world.getCoordinatesForAll(Creature.class), onlyHasItemsInOrder(coordinate4, coordinate5, coordinate6));
     }
 }
