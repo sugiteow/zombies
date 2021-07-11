@@ -1,19 +1,24 @@
 package com.ailo.zombies.movement;
 
 import com.ailo.zombies.world.Coordinates;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import com.ailo.zombies.world.World;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.google.common.collect.Sets.newHashSet;
 import static java.lang.String.format;
 import static java.util.Collections.emptyList;
 
-class LateralMovementPattern implements MovementPattern {
+class SingleCoordinatesMovementPattern implements MovementPattern {
 
-    private static final Set<Character> VALID_INSTRUCTIONS = newHashSet('L', 'R', 'U', 'D');
+    private static final Map<Character, Coordinates> VALID_INSTRUCTIONS = new HashMap<Character, Coordinates>() {{
+        put('L', new Coordinates(-1, 0));
+        put('R', new Coordinates(1, 0));
+        put('U', new Coordinates(0, -1));
+        put('D', new Coordinates(0, 1));
+    }};
 
     @Override
     public List<Character> translate(String instruction) {
@@ -31,7 +36,7 @@ class LateralMovementPattern implements MovementPattern {
                 .mapToObj(c -> (char) c)
                 .collect(Collectors.toList());
 
-        if (VALID_INSTRUCTIONS.containsAll(instructions)) {
+        if (VALID_INSTRUCTIONS.keySet().containsAll(instructions)) {
             return instructions;
         }
         throw new IllegalArgumentException(format("Found an invalid instruction on [%s].  " +
@@ -39,7 +44,8 @@ class LateralMovementPattern implements MovementPattern {
     }
 
     @Override
-    public Coordinates applyTo(Coordinates originalCoordinates, char instruction) {
-        throw new NotImplementedException();
+    public Coordinates applyTo(Coordinates originalCoordinates, char instruction, World world) {
+        Coordinates newCoordinates = originalCoordinates.add(VALID_INSTRUCTIONS.get(instruction), world.getBoundaryCoordinates());
+        return newCoordinates;
     }
 }

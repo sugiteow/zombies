@@ -11,6 +11,27 @@ public class Coordinates {
         this.y = y;
     }
 
+    public Coordinates add(Coordinates otherCoordinates, Coordinates boundaryCoordinates) {
+        int newX = this.x + otherCoordinates.x;
+        int newY = this.y + otherCoordinates.y;
+
+        if (boundaryCoordinates != null) {
+            if (newX < 0) {
+                newX = boundaryCoordinates.x + (newX % boundaryCoordinates.x);
+            } else if (newX >= boundaryCoordinates.x) {
+                newX = newX % boundaryCoordinates.x;
+            }
+
+            if (newY < 0) {
+                newY = boundaryCoordinates.y + (newY % boundaryCoordinates.y);
+            } else if (newY >= boundaryCoordinates.y) {
+                newY = newY % boundaryCoordinates.y;
+            }
+        }
+
+        return new Coordinates(newX, newY);
+    }
+
     @Override
     public String toString() {
         return String.format("(%s,%s)", x, y);

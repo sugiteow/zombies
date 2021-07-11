@@ -35,4 +35,8 @@ public class World {
     public void place(Thing thing, Coordinates coordinates) {
         getContent(coordinates).add(thing);
     }
+
+    public Coordinates getBoundaryCoordinates() {
+        return boundaryCoordinates;
+    }
 }
