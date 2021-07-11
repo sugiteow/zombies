@@ -62,7 +62,7 @@ class SingleCoordinatesMovementPatternTest {
         Coordinates resultingCoordinates = movementPattern.applyTo(originalCoordinates, 'L', world);
 
         assertThat(resultingCoordinates, is(expectedCoordinates));
-        verify(originalCoordinates).add(new Coordinates(-1,0), world.getBoundaryCoordinates());
+        verify(originalCoordinates).add(new Coordinates(-1, 0), world.getBoundaryCoordinates());
     }
 
     @Test
@@ -75,7 +75,7 @@ class SingleCoordinatesMovementPatternTest {
         Coordinates resultingCoordinates = movementPattern.applyTo(originalCoordinates, 'R', world);
 
         assertThat(resultingCoordinates, is(expectedCoordinates));
-        verify(originalCoordinates).add(new Coordinates(1,0), world.getBoundaryCoordinates());
+        verify(originalCoordinates).add(new Coordinates(1, 0), world.getBoundaryCoordinates());
     }
 
     @Test
@@ -88,7 +88,7 @@ class SingleCoordinatesMovementPatternTest {
         Coordinates resultingCoordinates = movementPattern.applyTo(originalCoordinates, 'U', world);
 
         assertThat(resultingCoordinates, is(expectedCoordinates));
-        verify(originalCoordinates).add(new Coordinates(0,-1), world.getBoundaryCoordinates());
+        verify(originalCoordinates).add(new Coordinates(0, -1), world.getBoundaryCoordinates());
     }
 
     @Test
@@ -101,7 +101,28 @@ class SingleCoordinatesMovementPatternTest {
         Coordinates resultingCoordinates = movementPattern.applyTo(originalCoordinates, 'D', world);
 
         assertThat(resultingCoordinates, is(expectedCoordinates));
-        verify(originalCoordinates).add(new Coordinates(0,1), world.getBoundaryCoordinates());
+        verify(originalCoordinates).add(new Coordinates(0, 1), world.getBoundaryCoordinates());
+    }
+
+    @Test
+    public void shouldThrowIllegalArgumentExceptionWhenTryingToApplyInstructionOnNullCoordinates() {
+        assertThrows(IllegalArgumentException.class, () -> movementPattern.applyTo(null, 'D', world));
+    }
+
+    @Test
+    public void shouldThrowIllegalArgumentExceptionWhenTryingToApplyNullInstruction() {
+        assertThrows(IllegalArgumentException.class, () -> movementPattern.applyTo(new Coordinates(0, 0), null, world));
+    }
+
+    @Test
+    public void shouldThrowIllegalArgumentExceptionWhenTryingToApplyInstructionToNullWorld() {
+        assertThrows(IllegalArgumentException.class, () -> movementPattern.applyTo(new Coordinates(0, 0), 'D', null));
+    }
+
+    @Test
+    public void shouldThrowIllegalArgumentExceptionWhenTryingToApplyInvalidInstruction() {
+        assertThrows(IllegalArgumentException.class, () -> movementPattern.applyTo(new Coordinates(0, 0), 'X', world));
+        assertThrows(IllegalArgumentException.class, () -> movementPattern.applyTo(new Coordinates(0, 0), ' ', world));
     }
 
 }

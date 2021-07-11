@@ -10,5 +10,5 @@ public interface MovementPattern {
     public static final MovementPattern IMMOBILE_MOVEMENT_PATTERN = new ImmobileMovementPattern();
 
     List<Character> translate(String movementInstruction);
-    Coordinates applyTo(Coordinates originalCoordinates, char instruction, World world);
+    Coordinates applyTo(Coordinates originalCoordinates, Character instruction, World world);
 }

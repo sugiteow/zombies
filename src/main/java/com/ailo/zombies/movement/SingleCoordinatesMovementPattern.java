@@ -44,8 +44,23 @@ class SingleCoordinatesMovementPattern implements MovementPattern {
     }
 
     @Override
-    public Coordinates applyTo(Coordinates originalCoordinates, char instruction, World world) {
-        Coordinates newCoordinates = originalCoordinates.add(VALID_INSTRUCTIONS.get(instruction), world.getBoundaryCoordinates());
-        return newCoordinates;
+    public Coordinates applyTo(Coordinates originalCoordinates, Character instruction, World world) {
+        if (originalCoordinates == null) {
+            throw new IllegalArgumentException("originalCoordinates has to be specified");
+        }
+
+        if (instruction == null) {
+            throw new IllegalArgumentException("instruction has to be specified");
+        }
+
+        if (world == null) {
+            throw new IllegalArgumentException("world has to be specified");
+        }
+
+        if (!VALID_INSTRUCTIONS.containsKey(instruction)) {
+            throw new IllegalArgumentException(format("invalid instruction [%s]", instruction));
+        }
+
+        return originalCoordinates.add(VALID_INSTRUCTIONS.get(instruction), world.getBoundaryCoordinates());
     }
 }

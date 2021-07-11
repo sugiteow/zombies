@@ -15,7 +15,7 @@ class ImmobileMovementPattern implements MovementPattern {
     }
 
     @Override
-    public Coordinates applyTo(Coordinates originalCoordinates, char instruction, World world) {
+    public Coordinates applyTo(Coordinates originalCoordinates, Character instruction, World world) {
         return originalCoordinates;
     }
 }
