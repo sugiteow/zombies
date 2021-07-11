@@ -2,7 +2,6 @@ package com.ailo.zombies.movement;
 
 import com.ailo.zombies.world.Coordinates;
 import com.ailo.zombies.world.World;
-import com.sun.javaws.JnlpxArgs;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

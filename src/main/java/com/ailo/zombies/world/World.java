@@ -39,4 +39,8 @@ public class World {
     public Coordinates getBoundaryCoordinates() {
         return boundaryCoordinates;
     }
+
+    public void remove(Thing thing, Coordinates originalCoordinates) {
+
+    }
 }
