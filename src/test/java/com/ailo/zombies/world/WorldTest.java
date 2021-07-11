@@ -1,7 +1,9 @@
 package com.ailo.zombies.world;
 
+import com.ailo.zombies.entity.Creature;
 import com.ailo.zombies.entity.StubThing;
 import com.ailo.zombies.entity.Thing;
+import com.ailo.zombies.entity.Zombie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -76,6 +78,53 @@ class WorldTest {
         world.place(otherThing, coordinates);
 
         assertThat(world.getContent(coordinates), onlyHasItems(something, otherThing));
+    }
+
+    @Test
+    public void shouldTagThingWithIdBasedOnNumberOfThatTypeOfThingWhenPlacingItInTheWorld() {
+        Coordinates coordinates = new Coordinates(1, 1);
+        Thing zombie1 = new Zombie(world, coordinates);
+        Thing zombie2 = new Zombie(world, coordinates);
+
+        Thing creature1 = new Creature(world, coordinates);
+        Thing creature2 = new Creature(world, coordinates);
+        Thing creature3 = new Creature(world, coordinates);
+
+        assertThat(zombie1.getTag(), is(0));
+        assertThat(zombie2.getTag(), is(1));
+        assertThat(creature1.getTag(), is(0));
+        assertThat(creature2.getTag(), is(1));
+        assertThat(creature3.getTag(), is(2));
+    }
+
+    @Test
+    public void shouldKeepIncrementingTagWhenNewThingIsPlacedOnTheWorldEvenWhenAnotherThingOfTheSameTypeIsRemoved() {
+        Coordinates coordinates = new Coordinates(1, 1);
+        Thing zombie1 = new Zombie(world, coordinates);
+        world.remove(zombie1);
+
+        Thing zombie2 = new Zombie(world, coordinates);
+        assertThat(zombie2.getTag(), is(1));
+
+        world.remove(zombie2);
+        Thing zombie3 = new Zombie(world, coordinates);
+        assertThat(zombie3.getTag(), is(2));
+    }
+
+    @Test
+    public void shouldNotRetagThingWhenItAlreadyHasATag() {
+        Coordinates coordinates = new Coordinates(1, 1);
+        Thing zombie1 = new Zombie(world, coordinates);
+
+        world.place(zombie1, new Coordinates(2, 2));
+        world.place(zombie1, new Coordinates(3, 3));
+
+        assertThat(zombie1.getTag(), is(0));
+
+        Thing zombie2 = new Zombie(world, coordinates);
+        world.place(zombie2, new Coordinates(2, 2));
+
+        assertThat(zombie2.getTag(), is(1));
     }
 
     @Test

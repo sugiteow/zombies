@@ -10,6 +10,7 @@ import java.util.Set;
 import static java.lang.String.format;
 
 public class World {
+    private final Map<Class<? extends Thing>, Integer> numberOfThings = new HashMap<>();
     private final Map<Coordinates, Set<Thing>> worldContents = new HashMap<>();
     private final Coordinates boundaryCoordinates;
 
@@ -32,6 +33,12 @@ public class World {
 
     public void place(Thing thing, Coordinates coordinates) {
         getContent(coordinates).add(thing);
+
+        if (thing.getTag() == null) {
+            Integer numberOfThing = numberOfThings.getOrDefault(thing.getClass(), 0);
+            thing.setTag(numberOfThing);
+            numberOfThings.put(thing.getClass(), ++numberOfThing);
+        }
     }
 
     public Coordinates getBoundaryCoordinates() {

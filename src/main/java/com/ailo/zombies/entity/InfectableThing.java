@@ -9,8 +9,8 @@ public abstract class InfectableThing extends Thing {
     }
 
     public Zombie turnToZombie(String movementInstruction) {
-        world.remove(this);
-        Zombie zombie = new Zombie(world, getCurrentCoordinates());
+        getWorld().remove(this);
+        Zombie zombie = new Zombie(getWorld(), getCurrentCoordinates());
         zombie.move(movementInstruction);
         return zombie;
     }

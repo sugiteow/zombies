@@ -6,11 +6,16 @@ import com.ailo.zombies.world.World;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Logger;
+
+import static java.lang.String.format;
 
 public abstract class Thing {
+    static final Logger LOGGER = Logger.getLogger(Thing.class.getSimpleName());
 
-    final World world;
+    private final World world;
     private Coordinates currentCoordinates;
+    private Integer tag;
 
     public Thing(World world, Coordinates startingCoordinates) {
         this.world = world;
@@ -19,7 +24,6 @@ public abstract class Thing {
     }
 
     public void move(String movementInstruction) {
-        Coordinates originalCoordinates = currentCoordinates;
         Coordinates finalCoordinates = currentCoordinates;
         Set<Thing> passedThings = new HashSet<>();
 
@@ -37,6 +41,8 @@ public abstract class Thing {
         world.place(this, finalCoordinates);
         currentCoordinates = finalCoordinates;
 
+        LOGGER.info(format("%s moved to %s", this, finalCoordinates));
+
         this.applyEffectTo(passedThings, movementInstruction);
     }
 
@@ -44,7 +50,24 @@ public abstract class Thing {
         return currentCoordinates;
     }
 
+    World getWorld() {
+        return world;
+    }
+
     abstract MovementPattern getMovementPattern();
 
     abstract void applyEffectTo(Set<Thing> things, String movementInstruction);
+
+    public void setTag(Integer tag) {
+        this.tag = tag;
+    }
+
+    public Integer getTag() {
+        return tag;
+    }
+
+    @Override
+    public String toString() {
+        return format("%s %s", this.getClass().getSimpleName(), tag);
+    }
 }

@@ -42,6 +42,7 @@ class ThingTest {
         }};
 
         thing = new StubThing(world, startingCoordinates);
+        thing.setMovementPattern(movementPattern);
 
         when(world.getContent(any())).thenReturn(emptySet());
         when(movementPattern.translate(movementInstruction)).thenReturn(translatedInstructions);

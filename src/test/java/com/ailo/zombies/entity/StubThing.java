@@ -6,10 +6,9 @@ import com.ailo.zombies.world.World;
 
 import java.util.Set;
 
-import static com.ailo.zombies.movement.MovementPattern.IMMOBILE;
-
 public class StubThing extends Thing {
 
+    private MovementPattern movementPattern;
     private Set<Thing> affectedThings;
 
     public StubThing(World world, Coordinates startingCoordinates) {
@@ -18,7 +17,7 @@ public class StubThing extends Thing {
 
     @Override
     MovementPattern getMovementPattern() {
-        return IMMOBILE;
+        return movementPattern;
     }
 
     @Override
@@ -28,5 +27,9 @@ public class StubThing extends Thing {
 
     public Set<Thing> getAffectedThings() {
         return affectedThings;
+    }
+
+    public void setMovementPattern(MovementPattern movementPattern) {
+        this.movementPattern = movementPattern;
     }
 }
