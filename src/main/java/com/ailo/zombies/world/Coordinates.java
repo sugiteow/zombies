@@ -1,4 +1,4 @@
-package com.ailo.zombies;
+package com.ailo.zombies.world;
 
 import java.util.Objects;
 

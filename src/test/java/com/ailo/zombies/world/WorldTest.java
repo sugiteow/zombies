@@ -1,5 +1,9 @@
-package com.ailo.zombies;
+package com.ailo.zombies.world;
 
+import com.ailo.zombies.entity.Nothing;
+import com.ailo.zombies.entity.Thing;
+import com.ailo.zombies.world.Coordinates;
+import com.ailo.zombies.world.World;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +14,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
-public class WorldTest {
+class WorldTest {
 
     public World world;
     private int worldSize;

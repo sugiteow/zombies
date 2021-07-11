@@ -1,4 +1,4 @@
-package com.ailo.zombies;
+package com.ailo.zombies.entity;
 
 public interface Thing {
 

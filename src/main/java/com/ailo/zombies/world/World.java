@@ -1,4 +1,7 @@
-package com.ailo.zombies;
+package com.ailo.zombies.world;
+
+import com.ailo.zombies.entity.Nothing;
+import com.ailo.zombies.entity.Thing;
 
 import java.util.HashMap;
 import java.util.Map;
