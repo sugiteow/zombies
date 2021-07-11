@@ -1,8 +1,6 @@
 package com.ailo.zombies.world;
 
 import com.ailo.zombies.entity.Thing;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.SetMultimap;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -40,7 +38,8 @@ public class World {
         return boundaryCoordinates;
     }
 
-    public void remove(Thing thing, Coordinates originalCoordinates) {
-
+    public void remove(Thing thing, Coordinates coordinates) {
+        Set<Thing> contents = getContent(coordinates);
+        contents.remove(thing);
     }
 }

@@ -8,7 +8,7 @@ import java.util.Set;
 
 import static com.ailo.zombies.matcher.CustomMatchers.onlyHasItems;
 import static java.lang.String.format;
-import static org.hamcrest.CoreMatchers.instanceOf;
+import static java.util.Collections.emptySet;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -72,8 +72,36 @@ class WorldTest {
         Coordinates coordinates = new Coordinates(1, 1);
 
         world.place(something, coordinates);
-        world.place(otherThing ,coordinates);
+        world.place(otherThing, coordinates);
 
         assertThat(world.getContent(coordinates), onlyHasItems(something, otherThing));
+    }
+
+    @Test
+    public void shouldRemoveThingFromCoordinates() {
+        Thing aThing = mock(Thing.class);
+        Thing otherThing = mock(Thing.class);
+        Coordinates coordinates = new Coordinates(1, 1);
+
+        world.place(aThing, coordinates);
+        world.place(otherThing, coordinates);
+
+        world.remove(aThing, coordinates);
+        assertThat(world.getContent(coordinates), onlyHasItems(otherThing));
+
+        world.remove(otherThing, coordinates);
+        assertThat(world.getContent(coordinates), is(emptySet()));
+    }
+
+    @Test
+    public void shouldDoNothingWhenTheThingToRemoveNoLongerExistsInTheGivenCoordinates() {
+        Thing aThing = mock(Thing.class);
+        Thing otherThing = mock(Thing.class);
+        Coordinates coordinates = new Coordinates(1, 1);
+
+        world.place(aThing, coordinates);
+
+        world.remove(otherThing, coordinates);
+        world.remove(aThing, new Coordinates(2, 2));
     }
 }
