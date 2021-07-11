@@ -5,7 +5,6 @@ import com.ailo.zombies.world.Coordinates;
 import com.ailo.zombies.world.World;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +71,7 @@ class ThingTest {
         thing.move(movementInstruction);
 
         assertThat(thing.getCurrentCoordinates(), is(finalCoordinates));
-        verify(world).remove(thing, startingCoordinates);
+        verify(world).remove(thing);
         verify(world).place(thing, finalCoordinates);
     }
 
@@ -117,7 +116,7 @@ class ThingTest {
         }
 
         @Override
-        void applyEffectTo(Set<Thing> things) {
+        void applyEffectTo(Set<Thing> things, String movementInstruction) {
             this.affectedThings = things;
         }
 

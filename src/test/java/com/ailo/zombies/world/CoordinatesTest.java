@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class CoordinatesTest {
@@ -26,6 +27,7 @@ class CoordinatesTest {
         Coordinates resultingCoordinates = originalCoordinates.add(otherCoordinates, null);
 
         assertThat(resultingCoordinates, is(new Coordinates(0, 2)));
+        assertThat(resultingCoordinates, is(not(originalCoordinates)));
     }
 
     @Test

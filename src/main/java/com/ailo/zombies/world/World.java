@@ -38,8 +38,8 @@ public class World {
         return boundaryCoordinates;
     }
 
-    public void remove(Thing thing, Coordinates coordinates) {
-        Set<Thing> contents = getContent(coordinates);
+    public void remove(Thing thing) {
+        Set<Thing> contents = getContent(thing.getCurrentCoordinates());
         contents.remove(thing);
     }
 }

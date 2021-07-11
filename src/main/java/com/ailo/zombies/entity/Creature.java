@@ -6,7 +6,7 @@ import com.ailo.zombies.world.World;
 
 import java.util.Set;
 
-public class Creature extends Thing {
+public class Creature extends InfectableThing {
     public Creature(World world, Coordinates startingCoordinates) {
         super(world, startingCoordinates);
     }
@@ -17,7 +17,7 @@ public class Creature extends Thing {
     }
 
     @Override
-    void applyEffectTo(Set<Thing> things) {
-        // doesn't do anything yet
+    void applyEffectTo(Set<Thing> things, String movementInstruction) {
+        // doesn't do anything
     }
 }

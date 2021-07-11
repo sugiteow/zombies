@@ -9,7 +9,7 @@ import java.util.Set;
 
 public abstract class Thing {
 
-    private final World world;
+    final World world;
     private Coordinates currentCoordinates;
 
     public Thing(World world, Coordinates startingCoordinates) {
@@ -33,11 +33,11 @@ public abstract class Thing {
             }
         }
 
-        world.remove(this, originalCoordinates);
+        world.remove(this);
         world.place(this, finalCoordinates);
         currentCoordinates = finalCoordinates;
 
-        this.applyEffectTo(passedThings);
+        this.applyEffectTo(passedThings, movementInstruction);
     }
 
     public Coordinates getCurrentCoordinates() {
@@ -45,5 +45,6 @@ public abstract class Thing {
     }
 
     abstract MovementPattern getMovementPattern();
-    abstract void applyEffectTo(Set<Thing> things);
+
+    abstract void applyEffectTo(Set<Thing> things, String movementInstruction);
 }

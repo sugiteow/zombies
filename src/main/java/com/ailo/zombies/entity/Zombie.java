@@ -6,7 +6,7 @@ import com.ailo.zombies.world.World;
 
 import java.util.Set;
 
-import static com.ailo.zombies.movement.MovementPattern.IMMOBILE;
+import static com.ailo.zombies.movement.MovementPattern.WALKING;
 
 public class Zombie extends Thing {
 
@@ -16,11 +16,15 @@ public class Zombie extends Thing {
 
     @Override
     MovementPattern getMovementPattern() {
-        return IMMOBILE;
+        return WALKING;
     }
 
     @Override
-    void applyEffectTo(Set<Thing> things) {
-
+    void applyEffectTo(Set<Thing> things, String movementInstruction) {
+        things.forEach(thing -> {
+            if (thing instanceof InfectableThing) {
+                ((InfectableThing) thing).turnToZombie(movementInstruction);
+            }
+        });
     }
 }

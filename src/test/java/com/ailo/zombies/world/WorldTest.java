@@ -86,10 +86,10 @@ class WorldTest {
         world.place(aThing, coordinates);
         world.place(otherThing, coordinates);
 
-        world.remove(aThing, coordinates);
+        world.remove(aThing);
         assertThat(world.getContent(coordinates), onlyHasItems(otherThing));
 
-        world.remove(otherThing, coordinates);
+        world.remove(otherThing);
         assertThat(world.getContent(coordinates), is(emptySet()));
     }
 
@@ -101,7 +101,7 @@ class WorldTest {
 
         world.place(aThing, coordinates);
 
-        world.remove(otherThing, coordinates);
-        world.remove(aThing, new Coordinates(2, 2));
+        world.remove(otherThing);
+        world.remove(aThing);
     }
 }
