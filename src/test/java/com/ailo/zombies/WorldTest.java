@@ -7,7 +7,6 @@ import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
@@ -15,25 +14,25 @@ public class WorldTest {
 
     public World world;
     private int worldSize;
-    private WorldContent anyContent;
+    private Thing something;
 
     @BeforeEach
     public void setup() {
-        anyContent = mock(WorldContent.class);
+        something = mock(Thing.class);
 
         worldSize = 5;
         world = new World(worldSize);
     }
 
     @Test
-    public void shouldInitialiseAllCoordinatesWithNullContentWhenWorldIsFirstCreated() {
+    public void shouldInitialiseAllCoordinatesWithNothingObjectWhenWorldIsFirstCreated() {
         for (int x = 0; x < worldSize; x++) {
             for (int y = 0; y < worldSize; y++) {
                 Coordinates coordinates = new Coordinates(x, y);
-                WorldContent worldContent = world.getContent(coordinates);
-                String message = format("Expecting world content on (%s,%s) to be null", x, y);
+                Thing content = world.getContent(coordinates);
+                String message = format("Expecting world content on (%s,%s) to be Nothing", x, y);
 
-                assertThat(message, worldContent, instanceOf(EmptyContent.class));
+                assertThat(message, content.isNothing(), is(true));
             }
         }
     }
@@ -52,25 +51,25 @@ public class WorldTest {
         Coordinates coordinates = new Coordinates(1, 2);
         Coordinates otherCoordinates = new Coordinates(2, 2);
 
-        world.addContent(coordinates, anyContent);
+        world.addContent(coordinates, something);
 
-        assertThat(world.getContent(coordinates), is(anyContent));
-        assertThat(world.getContent(otherCoordinates), instanceOf(EmptyContent.class));
+        assertThat(world.getContent(coordinates), is(something));
+        assertThat(world.getContent(otherCoordinates), instanceOf(Nothing.class));
     }
 
     @Test
     public void shouldThrowIllegalArgumentExceptionWhenTryingToAddContentToNonExistentCoordinates() {
-        assertThrows(IllegalArgumentException.class, () -> world.addContent(new Coordinates(-1, -1), anyContent));
-        assertThrows(IllegalArgumentException.class, () -> world.addContent(new Coordinates(5, 4), anyContent));
-        assertThrows(IllegalArgumentException.class, () -> world.addContent(new Coordinates(4, 5), anyContent));
+        assertThrows(IllegalArgumentException.class, () -> world.addContent(new Coordinates(-1, -1), something));
+        assertThrows(IllegalArgumentException.class, () -> world.addContent(new Coordinates(5, 4), something));
+        assertThrows(IllegalArgumentException.class, () -> world.addContent(new Coordinates(4, 5), something));
     }
 
     @Test
     public void shouldThrowIllegalArgumentExceptionWhenTryingToAddContentToNonEmptyCoordinates() {
-        WorldContent newContent = mock(WorldContent.class);
+        Thing otherThing = mock(Thing.class);
         Coordinates coordinates = new Coordinates(1, 1);
 
-        world.addContent(coordinates, anyContent);
-        assertThrows(IllegalArgumentException.class, () -> world.addContent(coordinates, newContent));
+        world.addContent(coordinates, this.something);
+        assertThrows(IllegalArgumentException.class, () -> world.addContent(coordinates, otherThing));
     }
 }
