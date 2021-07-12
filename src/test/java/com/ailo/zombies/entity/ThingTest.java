@@ -13,8 +13,8 @@ import java.util.List;
 
 import static com.ailo.zombies.matcher.CustomMatchers.onlyHasItems;
 import static com.ailo.zombies.matcher.CustomMatchers.onlyHasItemsInOrder;
-import static com.google.common.collect.Sets.newHashSet;
-import static java.util.Collections.emptySet;
+import static com.google.common.collect.Sets.newLinkedHashSet;
+import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.*;
@@ -47,7 +47,7 @@ class ThingTest {
         stubThing = new StubThing(world, startingCoordinates);
         stubThing.setMovementPattern(movementPattern);
 
-        when(world.getContent(any())).thenReturn(emptySet());
+        when(world.getContent(any())).thenReturn(newLinkedHashSet());
         when(movementPattern.translate(movementInstruction)).thenReturn(translatedInstructions);
         when(movementPattern.applyTo(startingCoordinates, 'A', world)).thenReturn(coordinatesAfterA);
         when(movementPattern.applyTo(coordinatesAfterA, 'B', world)).thenReturn(finalCoordinates);
@@ -80,39 +80,39 @@ class ThingTest {
 
     @Test
     public void shouldApplyEffectToEverythingThatGotPasseWhenMovingAndResolveItInOrderOfPassing() {
-        Thing passedThing1 = mock(Thing.class);
-        Thing passedThing2 = mock(Thing.class);
-        Thing passedThing3 = mock(Thing.class);
+        Thing affectedThing1 = mock(Thing.class);
+        Thing affectedThing2 = mock(Thing.class);
+        Thing affectedThing3 = mock(Thing.class);
 
-        when(world.getContent(coordinatesAfterA)).thenReturn(newHashSet(passedThing1, passedThing2));
-        when(world.getContent(finalCoordinates)).thenReturn(newHashSet(passedThing3));
+        when(world.getContent(coordinatesAfterA)).thenReturn(newLinkedHashSet(asList(affectedThing1, affectedThing2)));
+        when(world.getContent(finalCoordinates)).thenReturn(newLinkedHashSet(asList(affectedThing3)));
 
         stubThing.move(movementInstruction);
 
-        assertThat(stubThing.getAffectedThings(), onlyHasItemsInOrder(passedThing1, passedThing2, passedThing3));
+        assertThat(stubThing.getAffectedThings(), onlyHasItemsInOrder(affectedThing1, affectedThing2, affectedThing3));
 
-        InOrder inOrder = inOrder(passedThing1, passedThing2, passedThing3);
+        InOrder inOrder = inOrder(affectedThing1, affectedThing2, affectedThing3);
 
-        inOrder.verify(passedThing1).resolveStatusEffect();
-        inOrder.verify(passedThing2).resolveStatusEffect();
-        inOrder.verify(passedThing3).resolveStatusEffect();
+        inOrder.verify(affectedThing1).resolveStatusEffect();
+        inOrder.verify(affectedThing2).resolveStatusEffect();
+        inOrder.verify(affectedThing3).resolveStatusEffect();
     }
 
     @Test
     public void shouldOnlyApplyStatusEffectOnceToEachThingsPassedWhenMoving() {
-        Thing passedThing1 = mock(Thing.class);
-        Thing passedThing2 = mock(Thing.class);
+        Thing affectedThing1 = mock(Thing.class);
+        Thing affectedThing2 = mock(Thing.class);
 
-        when(world.getContent(coordinatesAfterA)).thenReturn(newHashSet(passedThing1, passedThing2));
-        when(world.getContent(finalCoordinates)).thenReturn(newHashSet(passedThing1));
+        when(world.getContent(coordinatesAfterA)).thenReturn(newLinkedHashSet(asList(affectedThing1, affectedThing2)));
+        when(world.getContent(finalCoordinates)).thenReturn(newLinkedHashSet(asList(affectedThing1)));
 
         stubThing.move(movementInstruction);
 
-        assertThat(stubThing.getAffectedThings(), onlyHasItems(passedThing1, passedThing2));
+        assertThat(stubThing.getAffectedThings(), onlyHasItems(affectedThing1, affectedThing2));
 
-        InOrder inOrder = inOrder(passedThing1, passedThing2);
-        inOrder.verify(passedThing1).resolveStatusEffect();
-        inOrder.verify(passedThing2).resolveStatusEffect();
+        InOrder inOrder = inOrder(affectedThing1, affectedThing2);
+        inOrder.verify(affectedThing1).resolveStatusEffect();
+        inOrder.verify(affectedThing2).resolveStatusEffect();
     }
 
     @Test
@@ -120,7 +120,7 @@ class ThingTest {
         Thing thingWithUnresolvedStatusEffect = mock(Thing.class);
         Thing otherThing = mock(Thing.class);
 
-        when(world.getContent(coordinatesAfterA)).thenReturn(newHashSet(thingWithUnresolvedStatusEffect, otherThing));
+        when(world.getContent(coordinatesAfterA)).thenReturn(newLinkedHashSet(asList(thingWithUnresolvedStatusEffect, otherThing)));
         when(thingWithUnresolvedStatusEffect.hasUnresolvedStatusEffect()).thenReturn(true);
 
         stubThing.move(movementInstruction);

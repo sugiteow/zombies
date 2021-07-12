@@ -117,9 +117,6 @@ class WorldTest {
         Coordinates coordinates = new Coordinates(1, 1);
         Thing zombie1 = new Zombie(world, coordinates);
 
-        world.place(zombie1, new Coordinates(2, 2));
-        world.place(zombie1, new Coordinates(3, 3));
-
         assertThat(zombie1.getTag(), is(0));
 
         Thing zombie2 = new Zombie(world, coordinates);
@@ -135,9 +132,6 @@ class WorldTest {
         Thing aThing = new StubThing(world, coordinates);
         Thing otherThing = new StubThing(world, coordinates);
 
-        world.place(aThing, coordinates);
-        world.place(otherThing, coordinates);
-
         world.remove(aThing);
         assertThat(world.getContent(coordinates), onlyHasItems(otherThing));
 
@@ -150,8 +144,6 @@ class WorldTest {
         Coordinates coordinates = new Coordinates(1, 1);
         Thing aThing = new StubThing(world, coordinates);
         Thing otherThing = new StubThing(world, coordinates);
-
-        world.place(aThing, coordinates);
 
         world.remove(otherThing);
         world.remove(aThing);

@@ -10,20 +10,20 @@ import static java.util.Comparator.comparing;
 
 public class World {
     private final Map<Class<? extends Thing>, Integer> numberOfAddedThings = new HashMap<>();
-    private final Map<Coordinates, Set<Thing>> worldContents = new HashMap<>();
+    private final Map<Coordinates, LinkedHashSet<Thing>> worldContents = new HashMap<>();
     private final Coordinates boundaryCoordinates;
 
     public World(int worldSize) {
         for (int x = 0; x < worldSize; x++) {
             for (int y = 0; y < worldSize; y++) {
-                worldContents.put(new Coordinates(x, y), new HashSet<>());
+                worldContents.put(new Coordinates(x, y), new LinkedHashSet<>());
             }
         }
         this.boundaryCoordinates = new Coordinates(worldSize, worldSize);
     }
 
-    public Set<Thing> getContent(Coordinates coordinates) {
-        Set<Thing> things = worldContents.get(coordinates);
+    public LinkedHashSet<Thing> getContent(Coordinates coordinates) {
+        LinkedHashSet<Thing> things = worldContents.get(coordinates);
         if (things == null) {
             throw new IllegalArgumentException(format("Unable to find Coordinates %s.  Please make sure the coordinates is valid", coordinates));
         }
@@ -45,7 +45,7 @@ public class World {
     }
 
     public void remove(Thing thing) {
-        Set<Thing> contents = getContent(thing.getCurrentCoordinates());
+        LinkedHashSet<Thing> contents = getContent(thing.getCurrentCoordinates());
         contents.remove(thing);
     }
 
