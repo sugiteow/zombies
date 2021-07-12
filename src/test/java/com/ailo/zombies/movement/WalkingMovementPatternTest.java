@@ -5,7 +5,7 @@ import com.ailo.zombies.world.World;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static java.util.Arrays.asList;
+import static com.ailo.zombies.matcher.CustomMatchers.onlyHasItemsInOrder;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
@@ -26,9 +26,9 @@ class WalkingMovementPatternTest {
 
     @Test
     public void shouldReturnListOfInstructionsWhenParsingValidInstruction() {
-        assertThat(movementPattern.translate("RDLU"), is(asList('R', 'D', 'L', 'U')));
-        assertThat(movementPattern.translate("ULRDULR"), is(asList('U', 'L', 'R', 'D', 'U', 'L', 'R')));
-        assertThat(movementPattern.translate("RD"), is(asList('R', 'D')));
+        assertThat(movementPattern.translate("RDLU"), onlyHasItemsInOrder('R', 'D', 'L', 'U'));
+        assertThat(movementPattern.translate("ULRDULR"), onlyHasItemsInOrder('U', 'L', 'R', 'D', 'U', 'L', 'R'));
+        assertThat(movementPattern.translate("RD"), onlyHasItemsInOrder('R', 'D'));
     }
 
     @Test
@@ -40,7 +40,7 @@ class WalkingMovementPatternTest {
 
     @Test
     public void shouldTrimEmptySpaceOnTheFrontAndTheBackOfTheInstructions() {
-        assertThat(movementPattern.translate("     RDLU    "), is(asList('R', 'D', 'L', 'U')));
+        assertThat(movementPattern.translate("     RDLU    "), onlyHasItemsInOrder('R', 'D', 'L', 'U'));
     }
 
     @Test
