@@ -9,7 +9,7 @@ import static java.lang.String.format;
 
 public class InfectionStatusEffect implements StatusEffect {
 
-    private String movementInstruction;
+    private final String movementInstruction;
 
     public InfectionStatusEffect(String movementInstruction) {
         this.movementInstruction = movementInstruction;

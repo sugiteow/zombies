@@ -14,11 +14,11 @@ class ZombieTest {
 
     private Zombie zombie;
     private String movementInstruction;
-    private World world;
 
     @BeforeEach
     public void setup() {
-        world = mock(World.class);
+        World world = mock(World.class);
+
         infectableThing = mock(InfectableThing.class);
         nonInfectableThing = mock(Thing.class);
         movementInstruction = "RDU";

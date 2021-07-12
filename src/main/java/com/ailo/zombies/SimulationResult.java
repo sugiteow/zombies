@@ -5,8 +5,8 @@ import com.ailo.zombies.world.Coordinates;
 import java.util.List;
 
 public class SimulationResult {
-    private List<Coordinates> allZombiesCoordinates;
-    private List<Coordinates> allCreatureCoordinates;
+    private final List<Coordinates> allZombiesCoordinates;
+    private final List<Coordinates> allCreatureCoordinates;
 
     public SimulationResult(List<Coordinates> allZombiesCoordinates,
                             List<Coordinates> allCreatureCoordinates) {

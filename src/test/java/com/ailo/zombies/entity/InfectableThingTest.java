@@ -14,7 +14,6 @@ class InfectableThingTest {
 
     private InfectableThing infectableThing;
     private World world;
-    private Coordinates currentCoordinates;
     private String movementInstruction;
 
     private Coordinates expectedFinalCoordinates;
@@ -22,9 +21,8 @@ class InfectableThingTest {
     @BeforeEach
     public void setup() {
         world = new World(5);
-        currentCoordinates = new Coordinates(0, 1);
         movementInstruction = "RD";
-        infectableThing = new StubInfectableThing(world, currentCoordinates);
+        infectableThing = new StubInfectableThing(world, new Coordinates(0, 1));
         expectedFinalCoordinates = new Coordinates(1, 2);
     }
 

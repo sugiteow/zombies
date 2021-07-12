@@ -31,12 +31,12 @@ The main "acceptance test" that exercises the requested scenario in the problem 
 
 * Grid in the world is Map of Coordinates, instead of just an array to allow nicer way to remove/add/check the content
   on the grid, and provide better extensibility
-  (e.g. in case we want to add third dimension - z into it)
+  (e.g. in case we want to add third dimension into it)
 * The content inside the world is represented by Thing object (apology for the naming, can't think of better name for
   it). This is to provide a bit more specifics on what could be put into a grid in the world. It also encapsulates
   common Thing behaviour, like say: tagging, and ability to receive move instruction
 * Movement and Status Effect is also designed as a separate hierarchy of object, making it easier to extend (making a
   new movement type, say "Jumping" for example)
-  and also allowing for consistent behaviours across Things that uses the same movement type/can be hit with the same
+  and also allowing for consistent behaviour across Things that uses the same movement type/can be hit with the same
   status effect. This also allows each individual effect/movement to be reused for a new type of Thing (when/if
   necessary).

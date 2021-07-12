@@ -10,7 +10,7 @@ import java.util.List;
 public class StubThing extends Thing {
 
     private MovementPattern movementPattern;
-    private List<Thing> affectedThings = new ArrayList<>();
+    private final List<Thing> affectedThings = new ArrayList<>();
 
     public StubThing(World world, Coordinates startingCoordinates) {
         super(world, startingCoordinates);

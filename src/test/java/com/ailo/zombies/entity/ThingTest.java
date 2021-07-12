@@ -24,7 +24,6 @@ class ThingTest {
     private MovementPattern movementPattern;
     private StubThing stubThing;
     private String movementInstruction;
-    private List<Character> translatedInstructions;
     private World world;
     private Coordinates startingCoordinates;
     private Coordinates coordinatesAfterA;
@@ -32,17 +31,17 @@ class ThingTest {
 
     @BeforeEach
     public void setup() {
+        List<Character> translatedInstructions = new ArrayList<Character>() {{
+            add('A');
+            add('B');
+        }};
+
         movementPattern = mock(MovementPattern.class);
         startingCoordinates = new Coordinates(0, 0);
         coordinatesAfterA = new Coordinates(1, 1);
         finalCoordinates = new Coordinates(2, 2);
         world = mock(World.class);
-
         movementInstruction = "some-instruction";
-        translatedInstructions = new ArrayList<Character>() {{
-            add('A');
-            add('B');
-        }};
 
         stubThing = new StubThing(world, startingCoordinates);
         stubThing.setMovementPattern(movementPattern);
